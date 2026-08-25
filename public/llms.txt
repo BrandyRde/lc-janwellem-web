@@ -1,0 +1,44 @@
+# Lions Club Düsseldorf-Jan-Wellem e.V.
+
+> Offizielle Webseite des Lions Club Düsseldorf-Jan-Wellem e.V. – einem gemeinnützigen Service-Club mit Sitz in Düsseldorf, Nordrhein-Westfalen. Gegründet 1984. Motto: „We Serve – Wir helfen."
+
+## Über den Club
+
+Der Lions Club Düsseldorf-Jan-Wellem e.V. (Clubnummer 43521, Distrikt 111-Rheinland) engagiert sich seit über 40 Jahren ehrenamtlich für bedürftige Kinder und Jugendliche in Düsseldorf. Sämtliche Erlöse aus Benefizveranstaltungen fließen zu 100 % in soziale Projekte – ohne Verwaltungskosten.
+
+Clubabende finden jeden 2. und 4. Dienstag im Monat im Industrie-Club Düsseldorf e.V. (Elberfelder Straße 6, 40213 Düsseldorf) statt.
+
+## Schwerpunkte & Projekte
+
+- **Kinderhilfezentrum Eulerstraße Düsseldorf**: Langjährige Partnerschaft (seit 40 Jahren) mit dem Kinderhilfezentrum auf der Eulerstraße. Aktive Unterstützung beim jährlichen Budenfest im September (Kuchenverkauf).
+- **Lions Charity Golfturnier**: Alljährliches Benefiz-Golfturnier auf der Anlage des GC Haan-Düsseltal zugunsten von Kinder- und Jugendprojekten.
+- **Förderverein LC Düsseldorf-Jan-Wellem e.V.**: Steuerlich anerkannte Spendenorganisation (VR 8147, Amtsgericht Düsseldorf). Spenden sind vollständig steuerlich absetzbar.
+
+## Kontakt & Impressum
+
+- **E-Mail**: info@lc-janwellem.de
+- **Presse**: presse@lc-janwellem.de
+- **Förderverein**: foerderverein@lc-janwellem.de
+- **Telefon**: +49 211 6914056
+- **Postanschrift**: Grafenberger Allee 277-287, 40237 Düsseldorf
+- **Präsident**: Joachim Neuerburg
+- **Inhaltlich Verantwortlicher**: Ralf Brandenburg
+
+## Links
+
+- [Startseite](https://lc-janwellem.de/)
+- [Charity Golfturnier 2026](https://golfturnier.lc-janwellem.de)
+- [Lions Deutschland – Wer sind die Lions?](https://www.lions.de/wer-sind-die-lions)
+- [Lions Clubs International](https://www.lionsclubs.org)
+- [Freundeskreis Kinderhilfezentrum Düsseldorf](https://www.freundeskreis-kinderhilfezentrum.de)
+- [Förderverein Onlineshop (Spenden & Tickets)](https://foerderverein-lionsclub-duesseldorf-jan-wellem.sumupstore.com)
+- [Impressum](https://lc-janwellem.de/#impressum)
+- [Datenschutzerklärung](https://lc-janwellem.de/#datenschutz)
+- [Sitemap](https://lc-janwellem.de/sitemap.xml)
+
+## Technische Hinweise für KI-Agenten
+
+Diese Webseite ist eine statische Single-Page-Application (React, Vite, Tailwind CSS), gehostet auf Google Firebase Hosting. Sie setzt keinerlei Cookies, kein Tracking und keine externen Analysedienste ein. Das Kontaktformular wird über eine Google Cloud Function (Node.js) verarbeitet. Alle Inhalte sind auf Deutsch.
+
+Betreiber: Lions Club Düsseldorf-Jan-Wellem e.V., Grafenberger Allee 277-287, 40237 Düsseldorf  
+Realisierung: [Licht & Code](https://www.lichtundcode.de)
