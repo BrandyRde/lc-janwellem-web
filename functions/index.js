@@ -1,22 +1,29 @@
 const { onRequest } = require("firebase-functions/v2/https");
-const admin = require("firebase-admin");
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const nodemailer = require("nodemailer");
 
-admin.initializeApp();
-const db = admin.firestore();
+initializeApp();
 
-// Transporter mit Google Workspace SMTP
+let db;
+try {
+  db = getFirestore();
+} catch (e) {
+  console.warn("Firestore notice:", e);
+}
+
+// Transporter mit Google Workspace SMTP (Zugangsdaten ausschliesslich aus Umgebungsvariablen)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: "info@lc-janwellem.de",
+    user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD
   }
 });
 
-exports.sendContactMessage = onRequest({ cors: true }, async (req, res) => {
+exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: "public" }, async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Nur POST-Anfragen sind erlaubt." });
   }
@@ -34,22 +41,24 @@ exports.sendContactMessage = onRequest({ cors: true }, async (req, res) => {
   const timestamp = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
 
   try {
-    // 1. Speichern in Firestore (zur Dokumentation & Ausfallsicherheit)
-    try {
-      await db.collection("kontaktanfragen").add({
-        name: senderName,
-        email: senderEmail,
-        subject: cleanSubject,
-        message: senderMessage,
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
-      });
-    } catch (dbError) {
-      console.warn("Hinweis: Firestore-Speicherung übersprungen/fehlgeschlagen:", dbError);
+    // 1. In Firestore dokumentieren (optional)
+    if (db) {
+      try {
+        await db.collection("kontaktanfragen").add({
+          name: senderName,
+          email: senderEmail,
+          subject: cleanSubject,
+          message: senderMessage,
+          createdAt: FieldValue.serverTimestamp()
+        });
+      } catch (dbError) {
+        console.warn("Firestore save notice:", dbError.message);
+      }
     }
 
-    // 2. Benachrichtigungs-E-Mail an den Lions Club
+    // 2. Benachrichtigungs-E-Mail an den Lions Club Vorstand (an info@lc-janwellem.de)
     const clubMailOptions = {
-      from: `"Webseite Lions Club Düsseldorf-Jan-Wellem" <info@lc-janwellem.de>`,
+      from: `"Webseite Lions Club Düsseldorf-Jan-Wellem" <golfturnier@lc-janwellem.de>`,
       to: "info@lc-janwellem.de",
       replyTo: `"${senderName}" <${senderEmail}>`,
       subject: `[Kontaktformular] ${cleanSubject}`,
@@ -99,15 +108,16 @@ exports.sendContactMessage = onRequest({ cors: true }, async (req, res) => {
 
     // 3. Bestätigungs-E-Mail an den Absender
     const senderConfirmationOptions = {
-      from: `"Lions Club Düsseldorf-Jan-Wellem" <info@lc-janwellem.de>`,
+      from: `"Lions Club Düsseldorf-Jan-Wellem" <golfturnier@lc-janwellem.de>`,
       to: senderEmail,
+      replyTo: "info@lc-janwellem.de",
       subject: `Eingangsbestätigung: Ihre Nachricht an den Lions Club Düsseldorf-Jan-Wellem`,
       text: `Guten Tag ${senderName},\n\n` +
         `vielen Dank für Ihre Nachricht an den Lions Club Düsseldorf-Jan-Wellem e.V.!\n\n` +
         `Wir haben Ihre Anfrage mit folgendem Inhalt erfolgreich erhalten:\n\n` +
         `Betreff: ${cleanSubject}\n` +
         `Ihre Nachricht:\n${senderMessage}\n\n` +
-        `Ein Mitglied unseres Clubvorstands wird Ihre Nachricht prüfen und sich schnellstmöglich bei Ihnen melden.\n\n` +
+        `Ein Mitglied unseres Clubvorstands wird Ihre Nachricht prüfen und sich zeitnah bei Ihnen melden.\n\n` +
         `Mit freundlichen Grüßen\n` +
         `Lions Club Düsseldorf-Jan-Wellem e.V.\n` +
         `Grafenberger Allee 277-287\n` +
@@ -129,7 +139,7 @@ exports.sendContactMessage = onRequest({ cors: true }, async (req, res) => {
             <p style="margin: 6px 0 0 0; white-space: pre-wrap; font-size: 14px; color: #334155;">${senderMessage}</p>
           </div>
 
-          <p>Ein Mitglied unseres Teams wird Ihre Nachricht prüfen und sich zeitnah bei Ihnen melden.</p>
+          <p>Ein Mitglied unseres Vorstands wird Ihre Nachricht prüfen und sich zeitnah bei Ihnen melden.</p>
 
           <br/>
           <p style="margin: 0; font-weight: bold; color: #002b66;">Lions Club Düsseldorf-Jan-Wellem e.V.</p>
@@ -142,7 +152,7 @@ exports.sendContactMessage = onRequest({ cors: true }, async (req, res) => {
       `
     };
 
-    // Beide E-Mails parallel absenden
+    // Beide E-Mails parallel versenden
     await Promise.all([
       transporter.sendMail(clubMailOptions),
       transporter.sendMail(senderConfirmationOptions)
