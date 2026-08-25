@@ -1,57 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ImpactBar from './components/ImpactBar';
-import Philosophy from './components/Philosophy';
-import LionsOrganizationSection from './components/LionsOrganizationSection';
-import ProjectsSection from './components/ProjectsSection';
-import ActivitiesSection from './components/ActivitiesSection';
-import DonationSection from './components/DonationSection';
-import ContactSection from './components/ContactSection';
-import PrivacyBadge from './components/PrivacyBadge';
-import Footer from './components/Footer';
 import LegalModals from './components/LegalModals';
+
+// Below-the-fold sections loaded lazily (code splitting)
+const Philosophy = lazy(() => import('./components/Philosophy'));
+const LionsOrganizationSection = lazy(() => import('./components/LionsOrganizationSection'));
+const ProjectsSection = lazy(() => import('./components/ProjectsSection'));
+const ActivitiesSection = lazy(() => import('./components/ActivitiesSection'));
+const DonationSection = lazy(() => import('./components/DonationSection'));
+const ContactSection = lazy(() => import('./components/ContactSection'));
+const PrivacyBadge = lazy(() => import('./components/PrivacyBadge'));
+const Footer = lazy(() => import('./components/Footer'));
+
+// Simple loading fallback placeholder
+function SectionSkeleton() {
+  return <div className="py-16 bg-slate-50 animate-pulse" aria-hidden="true" />;
+}
 
 export default function App() {
   const [activeLegalModal, setActiveLegalModal] = useState(null); // 'impressum' | 'datenschutz' | null
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans selection:bg-amber-100 selection:text-amber-900">
+
+      {/* Skip-to-Content Link (Barrierefreiheit) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2 focus:bg-lions-gold focus:text-lions-navy focus:font-bold focus:rounded-lg focus:shadow-lg"
+      >
+        Direkt zum Inhalt
+      </a>
+
       {/* Header Navbar */}
       <Header onOpenLegal={setActiveLegalModal} />
 
       {/* Main Content Sections */}
-      <main className="flex-grow">
-        {/* Hero Section */}
+      <main id="main-content" className="flex-grow">
+        {/* Hero Section – always eagerly loaded (above the fold) */}
         <Hero />
 
-        {/* Impact Bar */}
+        {/* Impact Bar – eagerly loaded (just below fold) */}
         <ImpactBar />
 
-        {/* Philosophy & Club Story */}
-        <Philosophy />
+        {/* Below-the-fold sections – lazy loaded */}
+        <Suspense fallback={<SectionSkeleton />}>
+          {/* Philosophy & Club Story */}
+          <Philosophy />
+        </Suspense>
 
-        {/* Lions Organization Infobox */}
-        <LionsOrganizationSection />
+        <Suspense fallback={<SectionSkeleton />}>
+          {/* Lions Organization Infobox */}
+          <LionsOrganizationSection />
+        </Suspense>
 
-        {/* Core Charity Projects */}
-        <ProjectsSection />
+        <Suspense fallback={<SectionSkeleton />}>
+          {/* Core Charity Projects */}
+          <ProjectsSection />
+        </Suspense>
 
-        {/* Club Activities & Golf Teaser */}
-        <ActivitiesSection />
+        <Suspense fallback={<SectionSkeleton />}>
+          {/* Club Activities & Golf Teaser */}
+          <ActivitiesSection />
+        </Suspense>
 
-        {/* Donations & Förderverein */}
-        <DonationSection />
+        <Suspense fallback={<SectionSkeleton />}>
+          {/* Donations & Förderverein */}
+          <DonationSection />
+        </Suspense>
 
-        {/* Contact Section */}
-        <ContactSection />
+        <Suspense fallback={<SectionSkeleton />}>
+          {/* Contact Section */}
+          <ContactSection />
+        </Suspense>
       </main>
 
-      {/* Privacy Guarantee Badge */}
-      <PrivacyBadge onOpenPrivacy={() => setActiveLegalModal('datenschutz')} />
+      <Suspense fallback={null}>
+        {/* Privacy Guarantee Badge */}
+        <PrivacyBadge onOpenPrivacy={() => setActiveLegalModal('datenschutz')} />
 
-      {/* Footer */}
-      <Footer onOpenLegal={setActiveLegalModal} />
+        {/* Footer */}
+        <Footer onOpenLegal={setActiveLegalModal} />
+      </Suspense>
 
       {/* Legal Modals (Impressum / Datenschutz) */}
       <LegalModals

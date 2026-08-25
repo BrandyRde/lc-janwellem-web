@@ -1,0 +1,8 @@
+# Robots.txt – Lions Club Düsseldorf-Jan-Wellem e.V.
+# https://www.lc-janwellem.de
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://lc-janwellem.de/sitemap.xml

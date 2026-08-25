@@ -9,10 +9,12 @@ export default function Header({ onOpenLegal }) {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      // Close mobile menu on scroll
+      if (mobileMenuOpen) setMobileMenuOpen(false);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { label: 'Über uns', href: '#ueber-uns' },
@@ -29,12 +31,19 @@ export default function Header({ onOpenLegal }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Official Club Logo */}
-          <a href="#" className="flex items-center gap-3 group">
-            <img
-              src={clubInfo.images.logo}
-              alt={clubInfo.name}
-              className="h-12 sm:h-14 w-auto object-contain transition-transform group-hover:scale-105"
-            />
+          <a href="#" className="flex items-center gap-3 group" aria-label="Lions Club Düsseldorf-Jan-Wellem – Startseite">
+            <picture>
+              <source srcSet={clubInfo.images.logo} type="image/webp" />
+              <img
+                src={clubInfo.images.logoFallback}
+                alt={clubInfo.name}
+                width="300"
+                height="205"
+                loading="eager"
+                decoding="async"
+                className="h-12 sm:h-14 w-auto object-contain transition-transform group-hover:scale-105"
+              />
+            </picture>
           </a>
 
           {/* Desktop Navigation */}
@@ -84,8 +93,10 @@ export default function Header({ onOpenLegal }) {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-700 hover:bg-slate-100 focus:outline-none"
-              aria-label="Menü öffnen"
+              className="p-2 rounded-lg text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-lions-gold"
+              aria-label={mobileMenuOpen ? 'Menü schließen' : 'Menü öffnen'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -95,7 +106,7 @@ export default function Header({ onOpenLegal }) {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-3 shadow-xl">
+        <div id="mobile-nav" className="lg:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-3 shadow-xl">
           <div className="flex flex-col space-y-2">
             {navLinks.map((link) => (
               <a

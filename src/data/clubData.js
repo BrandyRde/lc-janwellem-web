@@ -42,9 +42,12 @@ export const clubInfo = {
     guestInfo: "Interessenten und Gäste sind zu unseren Clubabenden herzlich willkommen. Um vorherige Kontaktaufnahme wird gebeten."
   },
   images: {
-    logo: "/images/logo_janwellem.png",
-    founding1984: "/images/gruendung_1984.jpg",
-    janWellemStatue: "/images/jan_wellem_statue.jpg"
+    logo: "/images/logo_janwellem.webp",
+    logoFallback: "/images/logo_janwellem.png",
+    founding1984: "/images/gruendung_1984.webp",
+    founding1984Fallback: "/images/gruendung_1984.jpg",
+    janWellemStatue: "/images/jan_wellem_statue.webp",
+    janWellemStatueFallback: "/images/jan_wellem_statue.jpg"
   },
   satelliteSites: {
     golf: {

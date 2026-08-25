@@ -8,11 +8,18 @@ export default function Hero() {
       
       {/* Full-Bleed High-Res Background Image (Jan Wellem Statue with Clear Blue Sky) */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={clubInfo.images.janWellemStatue}
-          alt="Kurfürst Jan Wellem Reiterdenkmal Düsseldorf"
-          className="w-full h-full object-cover object-[75%_20%] sm:object-[70%_25%] md:object-right-top brightness-100 contrast-100"
-        />
+        <picture>
+          <source srcSet={clubInfo.images.janWellemStatue} type="image/webp" />
+          <img
+            src={clubInfo.images.janWellemStatueFallback}
+            alt="Kurfürst Jan Wellem Reiterdenkmal Düsseldorf"
+            width="1024"
+            height="682"
+            fetchPriority="high"
+            decoding="sync"
+            className="w-full h-full object-cover object-[75%_20%] sm:object-[70%_25%] md:object-right-top brightness-100 contrast-100"
+          />
+        </picture>
         {/* Soft, Light Gradient Overlay: Darker on the left for contrast, bright on the right */}
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-950/50 sm:via-slate-900/35 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-900/20" />
