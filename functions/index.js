@@ -12,7 +12,23 @@ try {
   console.warn("Firestore notice:", e);
 }
 
-// Transporter mit Google Workspace SMTP (Zugangsdaten ausschliesslich aus Umgebungsvariablen)
+// Hilfsfunktion zur Verhinderung von HTML-Injection in E-Mail-Clients
+function escapeHtml(str) {
+  if (typeof str !== "string") return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// E-Mail-Validierung
+function isValidEmail(email) {
+  return typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 120;
+}
+
+// Transporter mit Google Workspace SMTP
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -28,17 +44,38 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
     return res.status(405).json({ error: "Nur POST-Anfragen sind erlaubt." });
   }
 
-  const { name, email, subject, message } = req.body || {};
+  const { name, email, subject, message, website_hp } = req.body || {};
 
+  // 1. Honeypot Spam-Schutz: Wenn das versteckte Feld ausgefüllt ist, handelt es sich um einen Bot
+  if (website_hp) {
+    console.warn("Spam-Bot erkannt und abgefangen via Honeypot.");
+    return res.status(200).json({ success: true, message: "Nachricht erfolgreich versendet." });
+  }
+
+  // 2. Validierung & Längenbegrenzung (Schutz vor DoS / Payload-Abuse)
   if (!name || !email || !message) {
     return res.status(400).json({ error: "Bitte füllen Sie alle Pflichtfelder aus." });
   }
 
-  const cleanSubject = subject ? subject.trim() : "Allgemeine Kontaktanfrage";
-  const senderName = name.trim();
-  const senderEmail = email.trim();
-  const senderMessage = message.trim();
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: "Bitte geben Sie eine gültige E-Mail-Adresse ein." });
+  }
+
+  const senderName = String(name).trim().slice(0, 100);
+  const senderEmail = String(email).trim().slice(0, 120);
+  const cleanSubject = (subject ? String(subject).trim() : "Allgemeine Kontaktanfrage").slice(0, 200);
+  const senderMessage = String(message).trim().slice(0, 5000);
   const timestamp = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
+
+  if (senderName.length < 2 || senderMessage.length < 5) {
+    return res.status(400).json({ error: "Name und Nachricht sind zu kurz." });
+  }
+
+  // HTML-escaped Varianten für sichere E-Mail-Templates
+  const safeName = escapeHtml(senderName);
+  const safeEmail = escapeHtml(senderEmail);
+  const safeSubject = escapeHtml(cleanSubject);
+  const safeMessage = escapeHtml(senderMessage).replace(/\n/g, "<br/>");
 
   try {
     // 1. In Firestore dokumentieren (optional)
@@ -52,13 +89,13 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
           createdAt: FieldValue.serverTimestamp()
         });
       } catch (dbError) {
-        console.warn("Firestore save notice:", dbError.message);
+        console.warn("Firestore notice:", dbError.message);
       }
     }
 
-    // 2. Benachrichtigungs-E-Mail an den Lions Club Vorstand (an info@lc-janwellem.de)
+    // 2. Benachrichtigungs-E-Mail an den Lions Club Vorstand
     const clubMailOptions = {
-      from: `"Webseite Lions Club Düsseldorf-Jan-Wellem" <golfturnier@lc-janwellem.de>`,
+      from: `"Webseite Lions Club Düsseldorf-Jan-Wellem" <${process.env.SMTP_USER || "golfturnier@lc-janwellem.de"}>`,
       to: "info@lc-janwellem.de",
       replyTo: `"${senderName}" <${senderEmail}>`,
       subject: `[Kontaktformular] ${cleanSubject}`,
@@ -78,15 +115,15 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
             <tr>
               <td style="padding: 8px 0; font-weight: bold; width: 120px; color: #475569;">Absender:</td>
-              <td style="padding: 8px 0;">${senderName}</td>
+              <td style="padding: 8px 0;">${safeName}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; font-weight: bold; color: #475569;">E-Mail:</td>
-              <td style="padding: 8px 0;"><a href="mailto:${senderEmail}" style="color: #002b66; font-weight: bold;">${senderEmail}</a></td>
+              <td style="padding: 8px 0;"><a href="mailto:${safeEmail}" style="color: #002b66; font-weight: bold;">${safeEmail}</a></td>
             </tr>
             <tr>
               <td style="padding: 8px 0; font-weight: bold; color: #475569;">Betreff:</td>
-              <td style="padding: 8px 0;">${cleanSubject}</td>
+              <td style="padding: 8px 0;">${safeSubject}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; font-weight: bold; color: #475569;">Datum:</td>
@@ -96,11 +133,11 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
 
           <div style="background-color: #f8fafc; border-left: 4px solid #f2b705; padding: 14px; border-radius: 4px; margin-bottom: 20px;">
             <h4 style="margin: 0 0 8px 0; color: #0f172a; font-size: 14px;">Nachricht:</h4>
-            <p style="margin: 0; white-space: pre-wrap; font-size: 14px; color: #334155;">${senderMessage}</p>
+            <p style="margin: 0; font-size: 14px; color: #334155;">${safeMessage}</p>
           </div>
 
           <p style="font-size: 12px; color: #94a3b8; margin-top: 24px; border-top: 1px solid #e2e8f0; padding-top: 12px;">
-            Sie können direkt auf diese E-Mail antworten, um an ${senderName} (${senderEmail}) zu schreiben.
+            Sie können direkt auf diese E-Mail antworten, um an ${safeName} (${safeEmail}) zu schreiben.
           </p>
         </div>
       `
@@ -108,7 +145,7 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
 
     // 3. Bestätigungs-E-Mail an den Absender
     const senderConfirmationOptions = {
-      from: `"Lions Club Düsseldorf-Jan-Wellem" <golfturnier@lc-janwellem.de>`,
+      from: `"Lions Club Düsseldorf-Jan-Wellem" <${process.env.SMTP_USER || "golfturnier@lc-janwellem.de"}>`,
       to: senderEmail,
       replyTo: "info@lc-janwellem.de",
       subject: `Eingangsbestätigung: Ihre Nachricht an den Lions Club Düsseldorf-Jan-Wellem`,
@@ -130,13 +167,13 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
             <p style="color: #64748b; font-size: 13px; margin: 4px 0 0 0;">We Serve – Ehrenamt, das ankommt</p>
           </div>
 
-          <p>Guten Tag <strong>${senderName}</strong>,</p>
+          <p>Guten Tag <strong>${safeName}</strong>,</p>
           <p>vielen Dank für Ihre Kontaktaufnahme! Hiermit bestätigen wir, dass Ihre Nachricht erfolgreich bei uns eingegangen ist.</p>
 
           <div style="background-color: #f8fafc; border-left: 4px solid #002b66; padding: 14px; border-radius: 4px; margin: 20px 0;">
-            <p style="margin: 0 0 6px 0; font-size: 13px; color: #64748b;"><strong>Betreff:</strong> ${cleanSubject}</p>
+            <p style="margin: 0 0 6px 0; font-size: 13px; color: #64748b;"><strong>Betreff:</strong> ${safeSubject}</p>
             <p style="margin: 0; font-size: 13px; color: #64748b;"><strong>Ihre übermittelte Nachricht:</strong></p>
-            <p style="margin: 6px 0 0 0; white-space: pre-wrap; font-size: 14px; color: #334155;">${senderMessage}</p>
+            <p style="margin: 6px 0 0 0; font-size: 14px; color: #334155;">${safeMessage}</p>
           </div>
 
           <p>Ein Mitglied unseres Vorstands wird Ihre Nachricht prüfen und sich zeitnah bei Ihnen melden.</p>

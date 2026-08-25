@@ -186,12 +186,28 @@ export default function ContactSection() {
                     </div>
                   )}
 
+                  {/* Hidden Honeypot Field for Spam Protection */}
+                  <div className="hidden" aria-hidden="true">
+                    <label htmlFor="website_hp">Webseite (bitte freilassen)</label>
+                    <input
+                      id="website_hp"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formData.website_hp || ''}
+                      onChange={(e) => setFormData({ ...formData, website_hp: e.target.value })}
+                    />
+                  </div>
+
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Ihr Name *</label>
+                      <label htmlFor="contact-name" className="text-xs font-bold uppercase tracking-wider text-slate-700">Ihr Name *</label>
                       <input
+                        id="contact-name"
                         type="text"
                         required
+                        minLength={2}
+                        maxLength={100}
                         disabled={status === 'loading'}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -201,10 +217,12 @@ export default function ContactSection() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-700">Ihre E-Mail *</label>
+                      <label htmlFor="contact-email" className="text-xs font-bold uppercase tracking-wider text-slate-700">Ihre E-Mail *</label>
                       <input
+                        id="contact-email"
                         type="email"
                         required
+                        maxLength={120}
                         disabled={status === 'loading'}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
