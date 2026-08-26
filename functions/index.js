@@ -157,7 +157,8 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
         `Ein Mitglied unseres Clubvorstands wird Ihre Nachricht prüfen und sich zeitnah bei Ihnen melden.\n\n` +
         `Mit freundlichen Grüßen\n` +
         `Lions Club Düsseldorf-Jan-Wellem e.V.\n` +
-        `Grafenberger Allee 277-287\n` +
+        `Alexander Thees\n` +
+        `Uhlandstraße 50\n` +
         `40237 Düsseldorf\n` +
         `https://www.lc-janwellem.de\n`,
       html: `
@@ -181,7 +182,8 @@ exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: 
           <br/>
           <p style="margin: 0; font-weight: bold; color: #002b66;">Lions Club Düsseldorf-Jan-Wellem e.V.</p>
           <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b;">
-            Grafenberger Allee 277-287<br/>
+            Alexander Thees<br/>
+            Uhlandstraße 50<br/>
             40237 Düsseldorf<br/>
             <a href="https://www.lc-janwellem.de" style="color: #002b66; text-decoration: none;">www.lc-janwellem.de</a>
           </p>

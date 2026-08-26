@@ -8,7 +8,8 @@ export const clubInfo = {
   clubNumber: "43521",
   district: "Distrikt 111-Rheinland, Region III, Zone 3",
   address: {
-    street: "Grafenberger Allee 277-287",
+    contact: "Alexander Thees",
+    street: "Uhlandstraße 50",
     zipCity: "40237 Düsseldorf",
     country: "Deutschland"
   },
@@ -25,7 +26,7 @@ export const clubInfo = {
     iban: "DE31 3005 0110 0010 0432 30",
     bic: "DUSSDEDDXXX",
     bank: "Stadtsparkasse Düsseldorf",
-    sumupUrl: "https://foerderverein-lionsclub-duesseldorf-jan-wellem.sumupstore.com",
+    sumupUrl: "https://foerderverein-lionsclub-duesseldorf-jan-wellem.sumupstore.com/product/spende-an-den-forderverein",
     notice: "Spenden an den Förderverein sind steuerlich voll abzugsfähig. Bei Spenden bis 300 € gilt der vereinfachte Zuwendungsnachweis (Kontoauszug). Für höhere Beträge stellen wir gerne eine offizielle Spendenbescheinigung aus."
   },
   board: {

@@ -30,6 +30,7 @@ export default function LegalModals({ activeModal, onClose }) {
               <div>
                 <h3 className="font-bold text-slate-900 text-base">Anbieter</h3>
                 <p>{clubInfo.legalName}</p>
+                {clubInfo.address.contact && <p>{clubInfo.address.contact}</p>}
                 <p>{clubInfo.address.street}</p>
                 <p>{clubInfo.address.zipCity}</p>
                 <p>Telefon: {clubInfo.contacts.phone}</p>
@@ -111,7 +112,7 @@ export default function LegalModals({ activeModal, onClose }) {
                 <p>Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) und anderer nationaler Datenschutzgesetze ist:</p>
                 <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
                   <strong className="text-slate-900 block text-sm">{clubInfo.legalName}</strong>
-                  <p>{clubInfo.address.street}, {clubInfo.address.zipCity}</p>
+                  <p>{clubInfo.address.contact ? `${clubInfo.address.contact}, ` : ''}{clubInfo.address.street}, {clubInfo.address.zipCity}</p>
                   <p>Vertreten durch den Präsidenten: {clubInfo.board.president}</p>
                   <p>Telefon: {clubInfo.contacts.phone}</p>
                   <p>E-Mail: <a href={`mailto:${clubInfo.contacts.general}`} className="text-lions-blue hover:underline font-semibold">{clubInfo.contacts.general}</a></p>

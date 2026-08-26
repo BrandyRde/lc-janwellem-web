@@ -68,6 +68,7 @@ export default function ContactSection() {
                   <div>
                     <span className="font-bold text-slate-900 block">Postanschrift</span>
                     <p>{clubInfo.name}</p>
+                    {clubInfo.address.contact && <p>{clubInfo.address.contact}</p>}
                     <p>{clubInfo.address.street}</p>
                     <p>{clubInfo.address.zipCity}</p>
                   </div>

@@ -20,7 +20,7 @@ Clubabende finden jeden 2. und 4. Dienstag im Monat im Industrie-Club Düsseldor
 - **Presse**: presse@lc-janwellem.de
 - **Förderverein**: foerderverein@lc-janwellem.de
 - **Telefon**: +49 211 6914056
-- **Postanschrift**: Grafenberger Allee 277-287, 40237 Düsseldorf
+- **Postanschrift**: Alexander Thees, Uhlandstraße 50, 40237 Düsseldorf
 - **Präsident**: Joachim Neuerburg
 - **Inhaltlich Verantwortlicher**: Ralf Brandenburg
 
@@ -31,7 +31,7 @@ Clubabende finden jeden 2. und 4. Dienstag im Monat im Industrie-Club Düsseldor
 - [Lions Deutschland – Wer sind die Lions?](https://www.lions.de/wer-sind-die-lions)
 - [Lions Clubs International](https://www.lionsclubs.org)
 - [Freundeskreis Kinderhilfezentrum Düsseldorf](https://www.freundeskreis-kinderhilfezentrum.de)
-- [Förderverein Onlineshop (Spenden & Tickets)](https://foerderverein-lionsclub-duesseldorf-jan-wellem.sumupstore.com)
+- [Förderverein Spenden-Artikel](https://foerderverein-lionsclub-duesseldorf-jan-wellem.sumupstore.com/product/spende-an-den-forderverein)
 - [Impressum](https://lc-janwellem.de/#impressum)
 - [Datenschutzerklärung](https://lc-janwellem.de/#datenschutz)
 - [Sitemap](https://lc-janwellem.de/sitemap.xml)
@@ -40,5 +40,5 @@ Clubabende finden jeden 2. und 4. Dienstag im Monat im Industrie-Club Düsseldor
 
 Diese Webseite ist eine statische Single-Page-Application (React, Vite, Tailwind CSS), gehostet auf Google Firebase Hosting. Sie setzt keinerlei Cookies, kein Tracking und keine externen Analysedienste ein. Das Kontaktformular wird über eine Google Cloud Function (Node.js) verarbeitet. Alle Inhalte sind auf Deutsch.
 
-Betreiber: Lions Club Düsseldorf-Jan-Wellem e.V., Grafenberger Allee 277-287, 40237 Düsseldorf  
+Betreiber: Lions Club Düsseldorf-Jan-Wellem e.V., Alexander Thees, Uhlandstraße 50, 40237 Düsseldorf  
 Realisierung: [Licht & Code](https://www.lichtundcode.de)
