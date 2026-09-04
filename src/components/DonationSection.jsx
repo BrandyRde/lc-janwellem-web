@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { clubInfo } from '../data/clubData';
-import { Heart, Copy, Check, ExternalLink, ShieldCheck, FileText, Sparkles, Building2 } from 'lucide-react';
+import { Heart, Copy, Check, ExternalLink, ShieldCheck, FileText, Sparkles, Building2, QrCode } from 'lucide-react';
 
 export default function DonationSection() {
   const [copied, setCopied] = useState(false);
+  const [showGiroCode, setShowGiroCode] = useState(false);
   const iban = clubInfo.foerderverein.iban;
 
   const handleCopy = () => {
@@ -135,6 +136,43 @@ export default function DonationSection() {
                       )}
                     </button>
                   </div>
+
+                  {/* GiroCode Toggle Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowGiroCode(!showGiroCode)}
+                    aria-expanded={showGiroCode}
+                    className="w-full mt-2.5 inline-flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-lions-navy/20 bg-lions-navy/5 hover:bg-lions-navy/10 text-lions-navy text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-lions-gold"
+                  >
+                    <QrCode className="w-4 h-4 text-lions-gold" />
+                    <span>{showGiroCode ? 'GiroCode ausblenden' : 'GiroCode (QR-Code für Banking-App) anzeigen'}</span>
+                  </button>
+
+                  {/* GiroCode Expandable Panel */}
+                  {showGiroCode && (
+                    <div className="mt-3 p-4 bg-white rounded-2xl border border-amber-200/90 shadow-sm text-center space-y-3">
+                      <div className="flex justify-center">
+                        <div className="p-3 bg-white rounded-xl border border-slate-200 shadow-sm inline-block">
+                          <img
+                            src="/images/girocode_spende.svg"
+                            alt="GiroCode für automatische Spendenüberweisung per Banking-App"
+                            width="160"
+                            height="160"
+                            className="w-40 h-40 mx-auto object-contain"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-lions-navy">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                          Offizieller EPC-GiroCode
+                        </span>
+                        <p className="text-[11px] text-slate-500 leading-snug max-w-xs mx-auto">
+                          In der Banking-App (Sparkasse, ING, Volksbank, Deutsche Bank etc.) unter <strong>„Fotoüberweisung / QR-Code scannen“</strong> einlesen. Empfänger, IBAN & Spendenzweck werden sofort übernommen.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div>

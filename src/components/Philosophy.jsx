@@ -28,11 +28,18 @@ export default function Philosophy() {
           {/* Left Column: Historic 1984 Founding Photo */}
           <div className="lg:col-span-6 space-y-4">
             <div className="relative rounded-2xl overflow-hidden shadow-xl bg-slate-900 border border-slate-200 group">
-              <img
-                src={clubInfo.images.founding1984}
-                alt="Gründungsfeier des Lions Club Düsseldorf-Jan-Wellem im Jahr 1984"
-                className="w-full h-80 sm:h-96 object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-700"
-              />
+              <picture>
+                <source srcSet={clubInfo.images.founding1984} type="image/webp" />
+                <img
+                  src={clubInfo.images.founding1984Fallback}
+                  alt="Gründungsfeier des Lions Club Düsseldorf-Jan-Wellem im Jahr 1984"
+                  width="1024"
+                  height="705"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-80 sm:h-96 object-cover object-center grayscale group-hover:grayscale-0 transition-all duration-700"
+                />
+              </picture>
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
               
               <div className="absolute bottom-4 left-5 right-5 text-white flex items-center justify-between">

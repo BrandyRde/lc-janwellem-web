@@ -198,3 +198,31 @@ export const clubValues = [
     description: "Unsere Mitglieder vereinen unterschiedlichste Professionen, Perspektiven und Lebenserfahrungen – verbunden durch das gemeinsame humanitäre Ziel."
   }
 ];
+
+export const faqList = [
+  {
+    question: "Sind Spenden an den Förderverein steuerlich absetzbar?",
+    answer: "Ja, in voller Höhe. Der Förderverein LC Düsseldorf-Jan-Wellem e.V. ist vom Finanzamt Düsseldorf als gemeinnützig anerkannt (VR 8147). Für Spenden bis 300 € gilt der vereinfachte Zuwendungsnachweis zusammen mit Ihrem Kontoauszug. Für höhere Beträge oder auf Wunsch stellen wir Ihnen selbstverständlich gerne eine offizielle Spendenbescheinigung aus."
+  },
+  {
+    question: "Wohin fließen die Spendengelder und fallen Verwaltungskosten an?",
+    answer: "100 % Ihrer Spende fließen direkt und ohne Abzüge in geförderte Kinder- und Jugendprojekte in Düsseldorf (wie das Kinderhilfezentrum Eulerstraße). Sämtliche Verwaltungskosten des Lions Clubs werden privat durch Mitgliedsbeiträge der Clubmitglieder getragen – es gibt null Euro Abzug für Verwaltung."
+  },
+  {
+    question: "Kann ich als Gast an einem Clubabend teilnehmen?",
+    answer: "Sehr gerne! Wir treffen uns regelmäßig jeden 2. und 4. Dienstag im Monat im traditionsreichen Industrie-Club Düsseldorf e.V. (Elberfelder Straße 6, 40213 Düsseldorf). Da unsere Clubabende mit Vorträgen und gemeinsamen Essen geplant werden, bitten wir interessierte Gäste um eine kurze vorherige Anmeldung über unser Kontaktformular oder per E-Mail an info@lc-janwellem.de."
+  },
+  {
+    question: "Wie kann ein Projekt für eine Förderung vorgeschlagen werden?",
+    answer: "Wir freuen uns stets über Hinweise auf förderungswürdige Kinder- und Jugendprojekte in Düsseldorf. Senden Sie uns dazu gerne eine kurze Projektbeschreibung mit Förderschwerpunkt und gewünschtem Budget über unser Kontaktformular oder an foerderverein@lc-janwellem.de. Der Vorstand prüft jeden Antrag sorgfältig."
+  },
+  {
+    question: "Was ist das Lions Charity Golfturnier?",
+    answer: "Unser jährliches Benefiz-Golfturnier auf der Meisterschaftsanlage des GC Haan-Düsseltal ist eines der traditionsreichsten Wohltätigkeitsturniere der Region. Alle Informationen zur Turnieranmeldung, zum Programm und zu den Sponsoring-Paketen finden Sie auf unserem gesonderten Turnierportal unter golfturnier.lc-janwellem.de."
+  },
+  {
+    question: "Welche Online-Zahlungsmethoden stehen für Spenden zur Verfügung?",
+    answer: "Über den gesicherten SumUp-Store unseres Fördervereins können Sie bequem und sicher per Kreditkarte (Visa, Mastercard, American Express), PayPal, Apple Pay, Google Pay oder Klarna spenden. Alternativ steht unser Spendenkonto für klassische SEPA-Überweisungen (inklusive GiroCode-Scan) bereit."
+  }
+];
+

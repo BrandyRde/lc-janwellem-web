@@ -21,6 +21,7 @@ export default function Header({ onOpenLegal }) {
     { label: 'Förderprojekte', href: '#foerderprojekte' },
     { label: 'Aktivitäten', href: '#aktivitaeten' },
     { label: 'Förderverein & Spenden', href: '#spenden' },
+    { label: 'FAQ', href: '#faq' },
     { label: 'Kontakt', href: '#kontakt' },
   ];
 

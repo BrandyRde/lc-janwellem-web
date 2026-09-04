@@ -38,6 +38,7 @@ export default function Footer({ onOpenLegal }) {
               <li><a href="#foerderprojekte" className="hover:text-lions-gold transition-colors">Düsseldorfer Förderprojekte</a></li>
               <li><a href="#aktivitaeten" className="hover:text-lions-gold transition-colors">Aktivitäten & Aktionen</a></li>
               <li><a href="#spenden" className="hover:text-lions-gold transition-colors">Förderverein & Spenden</a></li>
+              <li><a href="#faq" className="hover:text-lions-gold transition-colors">Häufige Fragen (FAQ)</a></li>
               <li><a href="#kontakt" className="hover:text-lions-gold transition-colors">Kontakt & Clubführung</a></li>
             </ul>
           </div>

@@ -10,6 +10,7 @@ const LionsOrganizationSection = lazy(() => import('./components/LionsOrganizati
 const ProjectsSection = lazy(() => import('./components/ProjectsSection'));
 const ActivitiesSection = lazy(() => import('./components/ActivitiesSection'));
 const DonationSection = lazy(() => import('./components/DonationSection'));
+const FaqSection = lazy(() => import('./components/FaqSection'));
 const ContactSection = lazy(() => import('./components/ContactSection'));
 const PrivacyBadge = lazy(() => import('./components/PrivacyBadge'));
 const Footer = lazy(() => import('./components/Footer'));
@@ -68,6 +69,11 @@ export default function App() {
         <Suspense fallback={<SectionSkeleton />}>
           {/* Donations & Förderverein */}
           <DonationSection />
+        </Suspense>
+
+        <Suspense fallback={<SectionSkeleton />}>
+          {/* FAQ Section */}
+          <FaqSection />
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton />}>

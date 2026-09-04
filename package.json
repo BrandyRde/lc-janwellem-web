@@ -7,13 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && npx firebase deploy --project lc-janwellem-web",
-    "deploy:hosting": "npm run build && npx firebase deploy --only hosting --project lc-janwellem-web",
-    "deploy:functions": "npx firebase deploy --only functions --project lc-janwellem-web"
+    "deploy": "npm run build && npx -y firebase-tools deploy --project lc-janwellem-web",
+    "deploy:hosting": "npm run build && npx -y firebase-tools deploy --only hosting --project lc-janwellem-web",
+    "deploy:functions": "npx -y firebase-tools deploy --only functions --project lc-janwellem-web"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "lucide-react": "^1.16.0",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^3.5.0"

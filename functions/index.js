@@ -39,9 +39,54 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+// In-Memory Sliding Window Rate Limiter (Schutz vor Mail-Bombing / Spam-Flooding)
+// Erlaubt maximal 5 Anfragen pro IP innerhalb eines 15-Minuten-Fensters
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 5;
+
+function isRateLimited(ip) {
+  if (!ip || ip === "unknown") return false;
+  const now = Date.now();
+  const timestamps = rateLimitMap.get(ip) || [];
+  
+  // Entferne Timestamps außerhalb des aktuellen Zeitfensters
+  const validTimestamps = timestamps.filter(ts => now - ts < RATE_LIMIT_WINDOW_MS);
+  
+  if (validTimestamps.length >= MAX_REQUESTS_PER_WINDOW) {
+    rateLimitMap.set(ip, validTimestamps);
+    return true;
+  }
+  
+  validTimestamps.push(now);
+  rateLimitMap.set(ip, validTimestamps);
+  
+  // Periodische Bereinigung bei großen Maps
+  if (rateLimitMap.size > 1000) {
+    for (const [key, list] of rateLimitMap.entries()) {
+      if (list.every(ts => now - ts >= RATE_LIMIT_WINDOW_MS)) {
+        rateLimitMap.delete(key);
+      }
+    }
+  }
+  return false;
+}
+
 exports.sendContactMessage = onRequest({ cors: true, maxInstances: 10, invoker: "public" }, async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Nur POST-Anfragen sind erlaubt." });
+  }
+
+  // Client-IP ermitteln
+  const forwarded = req.headers["x-forwarded-for"];
+  const clientIp = (typeof forwarded === "string" ? forwarded.split(",")[0].trim() : "") || req.ip || "unknown";
+
+  // Rate Limiting prüfen
+  if (isRateLimited(clientIp)) {
+    console.warn(`Rate-Limit überschritten für IP: ${clientIp}`);
+    return res.status(429).json({
+      error: "Zu viele Anfragen in kurzer Zeit. Bitte warten Sie einige Minuten, bevor Sie eine weitere Nachricht senden."
+    });
   }
 
   const { name, email, subject, message, website_hp } = req.body || {};
